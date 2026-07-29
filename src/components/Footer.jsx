@@ -47,7 +47,7 @@ export default function Footer() {
     <footer className="relative bg-paper">
       {/* ===== BAGIAN ATAS (putih): logo + deskripsi | kolom link =====
           kolom link digeser kiri dikit (pr gede) biar ga ketutup kertas
-          AvaliableOnProject yang melayang di kanan. */}
+          AvaliableOnProject yang melayang di kanan.*/}
       <div className="bg-paper text-ink">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-10 px-6 pb-10 pt-9 sm:px-9 md:flex-row md:items-start md:justify-between">
           {/* kiri: logo + deskripsi */}

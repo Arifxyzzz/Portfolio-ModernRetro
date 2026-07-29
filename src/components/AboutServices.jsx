@@ -54,7 +54,7 @@ export default function AboutServices() {
         </div>
         {/* karakter (DESKTOP) — absolute kanan, fade ke bawah */}
         <img
-          src="/AboutMe.png"
+          src="/AboutMe.webp"
           alt="Axzy"
           draggable="false"
           style={{
@@ -85,7 +85,7 @@ export default function AboutServices() {
 
           {/* karakter (MOBILE) — di flow, antara quote & tools */}
           <img
-            src="/AboutMe.png"
+            src="/AboutMe.webp"
             alt="Axzy"
             draggable="false"
             style={{

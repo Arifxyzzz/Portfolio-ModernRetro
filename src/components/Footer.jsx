@@ -103,10 +103,11 @@ export default function Footer() {
                 MANTUL BALIK ke posisi awal (dragConstraints 0 + dragElastic +
                 spring) — kesan kertas keiket. hover: gedein dikit + shadow
                 lebih tegas. */}
-            <motion.img
-              src="/AvaliableOnProject.svg"
-              alt="Available on Project"
-              aria-hidden="true"
+            {/* pakai <div> + background-image (bukan <img>) biar ga muncul
+                ikon "search image" (Google Lens) pas hover di browser. */}
+            <motion.div
+              role="img"
+              aria-label="Available on Project"
               draggable="false"
               drag
               dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
@@ -114,7 +115,13 @@ export default function Footer() {
               dragTransition={{ bounceStiffness: 260, bounceDamping: 16 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 1.04 }}
-              className="pointer-events-auto w-40 cursor-grab select-none drop-shadow-xl transition-[filter] duration-300 hover:drop-shadow-2xl active:cursor-grabbing sm:w-44 md:w-48"
+              style={{
+                backgroundImage: "url('/AvaliableOnProject.svg')",
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+              }}
+              className="pointer-events-auto aspect-square w-40 cursor-grab select-none drop-shadow-xl transition-[filter] duration-300 hover:drop-shadow-2xl active:cursor-grabbing sm:w-44 md:w-48"
             />
           </div>
         </div>

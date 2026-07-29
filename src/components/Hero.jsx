@@ -62,7 +62,7 @@ export default function Hero() {
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-bottom [scale:1] [filter:grayscale(1)_brightness(0.72)] sm:object-cover sm:object-center sm:[scale:1.18]"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-bottom [scale:1] [filter:grayscale(1)_brightness(0.72)] sm:object-cover sm:object-center sm:[scale:1]"
       />
       {/* LAYER 1b — background berwarna, cuma tampil di area cursor (spotlight) */}
       <motion.img
@@ -74,7 +74,7 @@ export default function Hero() {
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-bottom [scale:1] sm:object-cover sm:object-center sm:[scale:1.18]"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-bottom [scale:1] sm:object-cover sm:object-center sm:[scale:1]"
       />
 
       {/* LAYER 2 — title AXZY solid (di antara bg & objek).
@@ -99,7 +99,7 @@ export default function Hero() {
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE, delay: 0.15 }}
-        className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-contain object-bottom [scale:1] drop-shadow-[0_30px_50px_rgba(0,0,0,0.4)] sm:object-cover sm:object-center sm:[scale:1.18]"
+        className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-contain object-bottom [scale:1] drop-shadow-[0_30px_50px_rgba(0,0,0,0.4)] sm:object-cover sm:object-center sm:[scale:1]"
       />
 
       {/* LAYER 4 — title AXZY stroke (paling depan, biar tetap kebaca nembus karakter) */}

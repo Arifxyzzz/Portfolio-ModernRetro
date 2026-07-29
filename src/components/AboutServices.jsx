@@ -3,8 +3,7 @@ import { Bi } from './Icons'
 
 const EASE = [0.22, 1, 0.36, 1]
 
-/* ikon tool (SVG black-fill di-mask, jadi bisa diwarnain).
-   dipakai di baris "made with modern tools" pada bagian About. */
+/* ikon tool (SVG di-mask biar bisa diwarnain) */
 const ToolIcon = ({ src, className = '' }) => (
   <span
     aria-hidden="true"
@@ -16,22 +15,21 @@ const ToolIcon = ({ src, className = '' }) => (
   />
 )
 
-/* tools yang dipakai (ikon di /public/icons) */
+/* tools */
 const TOOLS = [
   { src: '/icons/CorelDraw.svg', label: 'CorelDRAW' },
   { src: '/icons/Lua.svg', label: 'LuaScript' },
   { src: '/icons/Roblox.svg', label: 'RobloxStudio' },
 ]
 
-/* daftar layanan (kolom kiri) — tiap item di-wrap 2 baris */
+/* daftar layanan (kolom kiri) */
 const SERVICES = [
   ['GRAPHIC', 'DESIGN'],
   ['ROBLOX UI', 'DESIGN'],
   ['ROBLOX', 'SCRIPTING'],
 ]
 
-/* isi 3 card (di bawah deskripsi). tiap card: judul 2 baris (Moderniz) +
-   pill putih berisi teks biasa + potongan highlight (lime). */
+/* isi 3 card */
 const CARDS = [
   { title: ['HIGH', 'QUALITY'], pill: 'A clean and neat', highlight: 'interface', float: true },
   { title: ['CUSTOM', 'SOLUTION'], pill: 'Built for your', highlight: 'needs', arrow: true },
@@ -40,18 +38,11 @@ const CARDS = [
 
 export default function AboutServices() {
   return (
-    /* section background = GRID BIRU. card (About gelap + Services putih)
-       melayang di atasnya. */
     <section id="about" className="relative">
-      {/* ===== ABOUT (gelap) — full width, tepi bawah disobek (satu sisi) ===== */}
-      {/* z-[30]: harus di ATAS objek hero (z-20). soalnya AboutMe nembus ke
-          atas masuk area hero — kalau z-nya di bawah, ketutup objek hero. */}
+      {/* ===== ABOUT (gelap) ===== */}
+      {/* z-[30]: harus di atas objek hero (z-20) */}
       <div className="relative z-[30] text-white">
-        {/* bg gelap DIPISAH ke layer sendiri biar sobekan (mask) cuma ngenain
-            background — AboutMe di sibling ini tetap bebas tembus ke atas.
-            di dalemnya: gambar hero-background (grayscale + digelapin) biar
-            nyambung sama hero, bukan flat. overlay gelap di atasnya biar teks
-            tetep kebaca. base bg-ticket sbg fallback kalau gambar gagal load. */}
+        {/* bg: gambar + base gelap, dikasih sobekan (mask) */}
         <div className="about-tear absolute inset-0 overflow-hidden bg-ticket">
           <img
             src="https://images5.alphacoders.com/140/1401545.jpg"
@@ -61,9 +52,7 @@ export default function AboutServices() {
             className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-center opacity-3 [filter:grayscale(1)]"
           />
         </div>
-        {/* karakter (kanan) — DESKTOP ONLY: absolute di kanan, fade ke bawah,
-            tembus ke atas card. di mobile disembunyiin (dipindah ke flow, di
-            bawah quote — lihat <img> inline di bawah). */}
+        {/* karakter (DESKTOP) — absolute kanan, fade ke bawah */}
         <img
           src="/AboutMe.png"
           alt="Axzy"
@@ -94,9 +83,7 @@ export default function AboutServices() {
             &ldquo;I communicate through visuals, not words.&rdquo;
           </p>
 
-          {/* karakter (MOBILE ONLY) — di flow, antara quote & "Made with
-              modern tools". desktop pakai <img> absolute di atas.
-              tetep dikasih fade ke bawah biar nyatu (sama kaya desktop). */}
+          {/* karakter (MOBILE) — di flow, antara quote & tools */}
           <img
             src="/AboutMe.png"
             alt="Axzy"
@@ -108,8 +95,7 @@ export default function AboutServices() {
             className="pointer-events-none mx-auto h-80 w-auto max-w-none select-none object-contain sm:hidden"
           />
 
-          {/* baris tools — teks besar (Jakarta) di TENGAH card + list
-              icon beserta namanya (nama di kanan icon), juga di tengah. */}
+          {/* baris tools */}
           <div className="mt-6 flex flex-col items-center gap-6 text-center">
             <span className="font-jakarta text-2xl fw-600 tracking-tight text-white sm:text-3xl">
               Made with modern tools.
@@ -135,14 +121,12 @@ export default function AboutServices() {
         </motion.div>
       </div>
 
-      {/* ===== SERVICES (putih) — full width, diselip naik ke belakang gigi
-          sobekan About (overlap) biar takik nampilin putih -> nyatu ===== */}
+      {/* ===== SERVICES (putih) — diselip naik ke sobekan About (overlap) ===== */}
       <div id="services" className="relative -mt-3 bg-paper">
         <div
           className="mx-auto grid max-w-[1400px] gap-10 px-6 py-16 sm:px-10 sm:py-28 md:grid-cols-[1.15fr_1fr] md:items-start md:gap-12"
         >
-          {/* kiri: label kecil (di ATAS list) + daftar layanan (Moderniz).
-              tiap item reveal sendiri-sendiri (stagger) + ilang pas kelewat. */}
+          {/* kiri: label + daftar layanan (stagger) */}
           <div className="flex flex-col gap-6">
             <motion.span
               initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
@@ -169,7 +153,7 @@ export default function AboutServices() {
             ))}
           </div>
 
-          {/* kanan: judul besar + deskripsi + 3 card (di bawah deskripsi) */}
+          {/* kanan: judul + deskripsi + 3 card */}
           <div className="flex flex-col gap-6">
             <motion.p
               initial={{ opacity: 0, y: 30, filter: 'blur(12px)' }}
@@ -194,11 +178,7 @@ export default function AboutServices() {
               turn their ideas into creative and functional digital experiences.
             </motion.p>
 
-            {/* 3 card KOSONG — efek STACKED 2 layer:
-                - layer bawah: duplikat card warna PUTIH, posisi sama tapi
-                  digeser turun dikit + di-blur -> jadi glow lembut di bawah.
-                - layer atas: card HITAM (yg keliatan penuh).
-                lebar total dibatasi = lebar deskripsi biar ga ngelebihin. */}
+            {/* 3 card — stacked (glow putih di bawah + card hitam di atas) */}
             <div className="mt-2 grid w-full max-w-[62ch] grid-cols-1 gap-3 sm:grid-cols-3">
               {CARDS.map((c, i) => (
                 <motion.figure
@@ -209,9 +189,7 @@ export default function AboutServices() {
                   transition={{ duration: 0.6, ease: EASE, delay: 0.15 + i * 0.12 }}
                   className="group relative flex min-h-[120px] flex-col justify-between rounded-3xl rounded-br-[3rem] bg-black p-4 text-white shadow-[0_20px_40px_-16px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1"
                 >
-                  {/* layer putih DI DALEM card: solid, geser turun + blur, mask
-                      gradient bawah->atas (pudar di atas). ditaruh paling
-                      belakang biar konten (z-[1]) ga ketutup. */}
+                  {/* glow putih (geser turun + blur, fade ke atas) */}
                   <div
                     aria-hidden="true"
                     style={{
@@ -220,24 +198,20 @@ export default function AboutServices() {
                     }}
                     className="pointer-events-none absolute inset-0 translate-y-3 rounded-3xl rounded-br-[3rem] bg-white blur-[15px]"
                   />
-                  {/* judul 2 baris — Moderniz. whitespace-nowrap biar
-                      "ON TIME" ga ke-wrap jadi 2 baris. */}
+                  {/* judul 2 baris */}
                   <h4 className="relative z-[1] text-center font-display text-sm uppercase leading-[1.05] tracking-tight sm:text-base">
                     {c.title[0]}
                     <br />
                     <span className="whitespace-nowrap">{c.title[1]}</span>
                   </h4>
-                  {/* pill putih: teks biasa (nowrap). highlight INLINE di dalem
-                      pill (kecuali card 'float' -> highlight jadi pill melayang).
-                      card 'float' kasih padding kanan ekstra biar teks ga
-                      ketutup pill 'interface' yg nimpa. */}
+                  {/* pill putih (highlight inline, kecuali 'float' -> melayang) */}
                   <div className="relative z-[1] mb-3 flex items-center justify-center">
                     <span
                       className={`relative inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white py-1.5 text-[11px] fw-600 text-ink shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)] transition-transform duration-300 ${
                         c.float
                           ? '-translate-x-2 pl-3 pr-12'
                           : c.highlight
-                            ? 'pl-3 pr-1.5' /* highlight inline: jarak kanan = py biar simetris */
+                            ? 'pl-3 pr-1.5'
                             : 'px-3'
                       } ${c.bubble ? 'origin-bottom-left group-hover:-rotate-6' : ''}`}
                     >
@@ -247,26 +221,21 @@ export default function AboutServices() {
                           {c.highlight}
                         </span>
                       )}
-                      {/* ekor bubble chat (segitiga kecil di bawah, agak ke kiri) */}
+                      {/* ekor bubble chat */}
                       {c.bubble && (
                         <span
                           aria-hidden="true"
                           className="absolute -bottom-1.5 left-5 h-3 w-3 rotate-45 bg-white"
                         />
                       )}
-                      {/* highlight MELAYANG (cuma card 'float'): pill lime terpisah
-                          nimpa di pojok kanan pill utama (di area padding-kanan),
-                          rotasi + shadow. ANCHOR ke pill (di dalem span) biar
-                          jarak-nya konsisten di mobile & desktop (ga ngikut lebar
-                          kartu yg beda). */}
+                      {/* highlight melayang (cuma 'float') */}
                       {c.highlight && c.float && (
                         <span className="absolute -right-4 top-1/2 -translate-y-1/2 rotate-[24deg] whitespace-nowrap rounded-full bg-lime px-2.5 py-1 text-[11px] fw-700 text-ink shadow-[0_6px_14px_-4px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:-translate-y-[60%] group-hover:rotate-[-8deg] group-hover:scale-110">
                           {c.highlight}
                         </span>
                       )}
                     </span>
-                    {/* card tengah: tombol bulat biru (panah) nempel di pill.
-                        pakai ikon Bootstrap biar bener-bener center di lingkaran. */}
+                    {/* tombol panah (card tengah) */}
                     {c.arrow && (
                       <span className="absolute -bottom-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-brand text-white shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-45">
                         <Bi name="arrow-up-right" className="text-[11px] leading-none" />

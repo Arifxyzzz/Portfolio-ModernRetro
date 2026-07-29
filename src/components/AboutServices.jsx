@@ -44,10 +44,23 @@ export default function AboutServices() {
        melayang di atasnya. */
     <section id="about" className="relative">
       {/* ===== ABOUT (gelap) — full width, tepi bawah disobek (satu sisi) ===== */}
-      <div className="relative z-[1] text-white">
+      {/* z-[30]: harus di ATAS objek hero (z-20). soalnya AboutMe nembus ke
+          atas masuk area hero — kalau z-nya di bawah, ketutup objek hero. */}
+      <div className="relative z-[30] text-white">
         {/* bg gelap DIPISAH ke layer sendiri biar sobekan (mask) cuma ngenain
-            background — AboutMe di sibling ini tetap bebas tembus ke atas. */}
-        <div className="about-tear absolute inset-0 bg-ticket" />
+            background — AboutMe di sibling ini tetap bebas tembus ke atas.
+            di dalemnya: gambar hero-background (grayscale + digelapin) biar
+            nyambung sama hero, bukan flat. overlay gelap di atasnya biar teks
+            tetep kebaca. base bg-ticket sbg fallback kalau gambar gagal load. */}
+        <div className="about-tear absolute inset-0 overflow-hidden bg-ticket">
+          <img
+            src="https://images5.alphacoders.com/140/1401545.jpg"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-center opacity-3 [filter:grayscale(1)]"
+          />
+        </div>
         {/* karakter (kanan) — DESKTOP ONLY: absolute di kanan, fade ke bawah,
             tembus ke atas card. di mobile disembunyiin (dipindah ke flow, di
             bawah quote — lihat <img> inline di bawah). */}

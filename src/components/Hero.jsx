@@ -50,7 +50,7 @@ export default function Hero() {
       id="top"
       ref={ref}
       onMouseMove={onMove}
-      className="relative min-h-screen overflow-hidden bg-ink text-white"
+      className="relative aspect-[4000/2248] overflow-hidden bg-ink text-white sm:aspect-auto sm:min-h-screen"
     >
       {/* LAYER 1a — background abu-abu (saturasi 0) */}
       <motion.img
@@ -62,7 +62,7 @@ export default function Hero() {
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-center [scale:1.18] [filter:grayscale(1)_brightness(0.72)]"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-bottom [scale:1] [filter:grayscale(1)_brightness(0.72)] sm:object-cover sm:object-center sm:[scale:1.18]"
       />
       {/* LAYER 1b — background berwarna, cuma tampil di area cursor (spotlight) */}
       <motion.img
@@ -74,10 +74,11 @@ export default function Hero() {
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-center [scale:1.18]"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-bottom [scale:1] sm:object-cover sm:object-center sm:[scale:1.18]"
       />
 
-      {/* LAYER 2 — title AXZY solid (di antara bg & objek) */}
+      {/* LAYER 2 — title AXZY solid (di antara bg & objek).
+          pt di mobile: geser title turun dikit biar ga ketutup navbar. */}
       <div className="absolute inset-0 z-10 flex items-center justify-center">
         <motion.h1
           style={{ y: yTitle }}
@@ -98,7 +99,7 @@ export default function Hero() {
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE, delay: 0.15 }}
-        className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-cover object-center [scale:1.18] drop-shadow-[0_30px_50px_rgba(0,0,0,0.4)]"
+        className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-contain object-bottom [scale:1] drop-shadow-[0_30px_50px_rgba(0,0,0,0.4)] sm:object-cover sm:object-center sm:[scale:1.18]"
       />
 
       {/* LAYER 4 — title AXZY stroke (paling depan, biar tetap kebaca nembus karakter) */}

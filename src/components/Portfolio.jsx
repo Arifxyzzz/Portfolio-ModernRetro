@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate } from 'motion/react'
 import { useRef, useContext } from 'react'
 import { ScrollContext } from '../scroll-context'
+import { useIsMobile } from '../use-is-mobile'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -10,7 +11,7 @@ const BlurWord = ({ children, delay = 0, className = '' }) => (
     className={`block ${className}`}
     initial={{ opacity: 0, filter: 'blur(24px)', scale: 1.06 }}
     whileInView={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
-    viewport={{ once: true, amount: 0.4 }}
+    viewport={{ once: false, amount: 0.4 }}
     transition={{ duration: 1.3, ease: EASE, delay }}
   >
     {children}
@@ -24,6 +25,9 @@ const BlurWord = ({ children, delay = 0, className = '' }) => (
 export default function Portfolio() {
   const ref = useRef(null)
   const scrollEl = useContext(ScrollContext)
+  // di mobile background dibikin DIEM (ga parallax) — cukup title & objek yg
+  // gerak. yBg dipaksa 0 kalau mobile.
+  const isMobile = useIsMobile()
   const { scrollYProgress } = useScroll({
     target: ref,
     container: scrollEl ? { current: scrollEl } : undefined,
@@ -32,7 +36,9 @@ export default function Portfolio() {
   // parallax halus: title & objek gerak beda kecepatan saat scroll
   const yTitle = useTransform(scrollYProgress, [0, 1], [60, -60])
   const yObjek = useTransform(scrollYProgress, [0, 1], [40, -40])
-  const yBg = useTransform(scrollYProgress, [0, 1], [-30, 30])
+  const yBgRaw = useTransform(scrollYProgress, [0, 1], [-30, 30])
+  // mobile: bg diem (0), desktop: parallax normal
+  const yBg = isMobile ? 0 : yBgRaw
 
   // posisi cursor untuk spotlight warna (default di tengah)
   const mx = useMotionValue(50)
@@ -50,7 +56,7 @@ export default function Portfolio() {
     <section
       ref={ref}
       onMouseMove={onMove}
-      className="relative min-h-screen overflow-hidden bg-paper text-ink"
+      className="relative aspect-[2940/1672] overflow-hidden bg-paper text-ink sm:aspect-auto sm:min-h-screen"
     >
       {/* LAYER 1a — background abu-abu (saturasi 0) */}
       <motion.img
@@ -59,7 +65,7 @@ export default function Portfolio() {
         aria-hidden="true"
         draggable="false"
         style={{ y: yBg }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-center [scale:1.18] [filter:grayscale(1)_brightness(1.05)]"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-center [filter:grayscale(1)_brightness(1.05)] sm:object-cover"
       />
       {/* LAYER 1b — background berwarna, cuma tampil di area cursor (spotlight) */}
       <motion.img
@@ -68,7 +74,7 @@ export default function Portfolio() {
         aria-hidden="true"
         draggable="false"
         style={{ y: yBg, maskImage: spotMask, WebkitMaskImage: spotMask }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-center [scale:1.18]"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-center sm:object-cover"
       />
 
       {/* LAYER 2 — title PORTFOLIO solid (di antara bg & objek) */}
@@ -91,9 +97,9 @@ export default function Portfolio() {
         style={{ y: yObjek }}
         initial={{ scale: 1.08, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.3 }}
         transition={{ duration: 1.4, ease: EASE, delay: 0.1 }}
-        className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-cover object-center [scale:1.18] drop-shadow-[0_30px_50px_rgba(0,0,0,0.35)]"
+        className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-contain object-center drop-shadow-[0_30px_50px_rgba(0,0,0,0.35)] sm:object-cover"
       />
 
       {/* LAYER 4 — title PORTFOLIO stroke gelap (paling depan, tetap kebaca nembus karakter) */}

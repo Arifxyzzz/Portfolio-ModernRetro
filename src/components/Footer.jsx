@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import Logo from './Logo'
 import { Bi } from './Icons'
+import Reveal from './Reveal'
 
 // kolom link di footer (Navigation & Social)
 const NAV = [
@@ -50,7 +51,7 @@ export default function Footer() {
       <div className="bg-paper text-ink">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-10 px-6 pb-10 pt-9 sm:px-9 md:flex-row md:items-start md:justify-between">
           {/* kiri: logo + deskripsi */}
-          <div className="max-w-sm">
+          <Reveal as="div" y={24} blur={10} amount={0.5} className="max-w-sm">
             {/* logo digedein; pakai block + leading-none biar tinggi
                 bener2 = height logo (ga ada jarak baris ekstra) */}
             <a href="#top" className="block leading-none -ml-3">
@@ -60,21 +61,21 @@ export default function Footer() {
               Whether you're building a Roblox game, growing a community, or launching a brand, 
               AxzyCreative turns rough ideas into clean UI, scripts, and visual systems.
             </p>
-          </div>
+          </Reveal>
 
           {/* kanan: Navigation + Social — digeser kiri dikit (pr) biar
               ga ketutup kertas AvaliableOnProject yang melayang di kanan. */}
-          <div className="flex gap-16 pr-0 sm:gap-24 md:pr-28 lg:pr-36">
+          <Reveal as="div" y={24} blur={10} delay={0.1} amount={0.5} className="flex gap-16 pr-0 sm:gap-24 md:pr-28 lg:pr-36">
             <FooterCol title="Navigation" items={NAV} />
             <FooterCol title="Social" items={SOCIAL} external />
-          </div>
+          </Reveal>
         </div>
 
       </div>
 
       {/* ===== BAGIAN BAWAH (band #252525) — tepi atas bergerigi (sobekan tiket) ===== */}
       <div className="footer-tear text-white">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-start gap-3 px-6 pb-6 pt-7 sm:flex-row sm:items-center sm:justify-between sm:px-9">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-3 px-6 pb-6 pt-7 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left sm:px-9">
           <p className="text-[15px] fw-400 text-white/45">
             © 2026 AxzyCreative. All Rights Reserved.
           </p>

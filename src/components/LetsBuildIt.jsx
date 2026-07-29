@@ -53,9 +53,9 @@ export default function LetsBuildIt() {
         <div className="flex flex-col gap-12 md:flex-row md:items-stretch md:justify-between">
           {/* heading */}
           <motion.h2
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
+            initial={{ opacity: 0, y: 40, filter: 'blur(18px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: false, amount: 0.4 }}
             transition={{ duration: 1, ease: EASE }}
             className="font-display text-[13vw] leading-[0.92] tracking-tight md:text-[7.5vw]"
           >
@@ -65,9 +65,9 @@ export default function LetsBuildIt() {
 
           {/* kanan: teks (atas) + tombol (bawah) */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
+            initial={{ opacity: 0, y: 30, filter: 'blur(14px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: false, amount: 0.4 }}
             transition={{ duration: 1, ease: EASE, delay: 0.15 }}
             className="flex flex-col md:-mt-2 md:items-end md:justify-between md:text-right"
           >
@@ -76,21 +76,25 @@ export default function LetsBuildIt() {
               <br className="hidden sm:block" /> GitHub or Discord
             </p>
             <div className="mt-8 flex flex-wrap gap-3 md:mt-0 md:justify-end">
-              {CONTACTS.map((c) => (
-                <a
+              {CONTACTS.map((c, i) => (
+                <motion.a
                   key={c.label}
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="group inline-flex shrink-0 items-stretch overflow-hidden rounded-2xl bg-ink text-base fw-600 leading-none shadow-[0_2px_8px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_24px_rgba(0,0,0,0.4)]"
+                  initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  viewport={{ once: false, amount: 0.6 }}
+                  transition={{ duration: 0.6, ease: EASE, delay: 0.3 + i * 0.1 }}
+                  className="group inline-flex shrink-0 items-stretch overflow-hidden rounded-2xl bg-ink text-sm fw-600 leading-none shadow-[0_2px_8px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_24px_rgba(0,0,0,0.4)] sm:text-base"
                 >
                   {/* kotak ikon (lime, 1:1, takik kanan-atas) */}
-                  <span className="flex aspect-square shrink-0 items-center justify-center rounded-2xl rounded-tr-none bg-lime text-ink">
-                    <Bi name={c.icon} className="text-2xl leading-none" />
+                  <span className="flex aspect-square w-11 shrink-0 items-center justify-center self-stretch rounded-2xl rounded-tr-none bg-lime text-ink sm:w-auto">
+                    <Bi name={c.icon} className="text-xl leading-none sm:text-2xl" />
                   </span>
                   {/* label */}
-                  <span className="flex shrink-0 items-center whitespace-nowrap py-4 pl-5 pr-12">{c.label}</span>
-                </a>
+                  <span className="flex shrink-0 items-center whitespace-nowrap py-3.5 pl-4 pr-6 sm:py-4 sm:pl-5 sm:pr-12">{c.label}</span>
+                </motion.a>
               ))}
             </div>
           </motion.div>

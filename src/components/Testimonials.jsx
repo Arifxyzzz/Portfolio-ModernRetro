@@ -56,18 +56,18 @@ export default function Testimonials() {
     <section className="relative overflow-hidden pb-6 pt-14 text-white sm:pt-16">
       {/* label kecil + heading */}
       <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
+        initial={{ opacity: 0, y: 20, filter: 'blur(12px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        viewport={{ once: false, amount: 0.5 }}
         transition={{ duration: 0.8, ease: EASE }}
         className="mb-4 text-center text-lg fw-500 uppercase tracking-[0.28em] text-lime"
       >
         Testimoni
       </motion.p>
       <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
+        initial={{ opacity: 0, y: 30, filter: 'blur(14px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        viewport={{ once: false, amount: 0.5 }}
         transition={{ duration: 1, ease: EASE, delay: 0.1 }}
         className="mx-auto max-w-[900px] px-6 text-center font-jakarta text-3xl fw-800 leading-[1.15] tracking-tight sm:text-4xl md:text-5xl"
       >
@@ -77,7 +77,11 @@ export default function Testimonials() {
       {/* dua baris marquee, arah berlawanan, tepi nge-fade.
           py gede + gap: kasih ruang buat shadow card biar ga kepotong
           (shadow-nya jatuh ~24px ke bawah). */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, filter: 'blur(16px)' }}
+        whileInView={{ opacity: 1, filter: 'blur(0px)' }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
         className="relative mt-14 flex flex-col gap-8 py-10"
         style={{
           WebkitMaskImage:
@@ -109,7 +113,7 @@ export default function Testimonials() {
             <Row items={rowB} />
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

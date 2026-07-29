@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from 'motion/react'
 import Logo from './Logo'
 import { Bi } from './Icons'
 import { ScrollContext } from '../scroll-context'
+import { useIsMobile } from '../use-is-mobile'
 
 const links = [
-  { label: 'Home', href: '#top' },
-  { label: 'Store', href: '#store' },
-  { label: 'Updates', href: '#updates' },
-  { label: 'Sales', href: '#sales' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', target: 'top' },
+  { label: 'About', target: 'about' },
+  { label: 'Service', target: 'services' },
+  { label: 'Contact', target: 'contact' },
 ]
 
 export default function Navbar() {
@@ -22,11 +22,42 @@ export default function Navbar() {
     new URLSearchParams(window.location.search).get('nav') === 'solid'
   const [scrolled, setScrolled] = useState(forceSolid)
   const scrollEl = useContext(ScrollContext)
+  // di mobile navbar SELALU solid (panel putih) — biar logo AXZY + menu
+  // kebaca (bg navbar putih) & title hero AXZY yg mepet atas ga keliatan
+  // nabrak logo (ketutup panel putih). desktop tetap ngikut scroll.
+  const isMobile = useIsMobile()
+  // solid = tampilan panel putih + teks gelap.
+  const solid = scrolled || open || isMobile
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [open])
+
+  // smooth-scroll ke section TANPA ngubah URL (ga ada /#top di address bar).
+  // scroll via container SimpleBar (fallback window). '#top' -> ke paling atas.
+  // section lain: posisi target dikurangi tinggi navbar biar ga ketutup.
+  const scrollTo = (e, id) => {
+    e.preventDefault()
+    setOpen(false)
+    const el = document.getElementById(id)
+    if (!el) return
+    const container = scrollEl ?? window
+    if (id === 'top') {
+      container.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    // offset navbar: di desktop navbar fixed (~94px), di mobile navbar ikut
+    // flow (relative) jadi ga perlu offset.
+    const navH = isMobile ? 0 : 94
+    if (scrollEl) {
+      const top = scrollEl.scrollTop + el.getBoundingClientRect().top - navH
+      scrollEl.scrollTo({ top, behavior: 'smooth' })
+    } else {
+      const top = window.scrollY + el.getBoundingClientRect().top - navH
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+  }
 
   // dengerin scroll dari container SimpleBar (fallback window kalau null)
   useEffect(() => {
@@ -46,18 +77,20 @@ export default function Navbar() {
       initial={{ y: -70, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        scrolled ? 'text-ink' : 'text-white'
+      className={`relative z-50 transition-colors duration-500 md:fixed md:inset-x-0 md:top-0 ${
+        solid ? 'text-ink' : 'text-white'
       }`}
     >
       {/* panel putih + sobekan bawah sebagai LAYER terpisah di belakang, biar
-          bisa di-animate blur-in mulus (background/mask ga bisa transisi CSS). */}
+          bisa di-animate blur-in mulus (background/mask ga bisa transisi CSS).
+          juga muncul saat menu mobile kebuka -> seluruh area (baris logo +
+          list) nyatu jadi satu panel navbar, ga perlu card terpisah. */}
       <motion.div
         aria-hidden="true"
         initial={false}
         animate={{
-          opacity: scrolled ? 1 : 0,
-          filter: scrolled ? 'blur(0px)' : 'blur(14px)',
+          opacity: solid ? 1 : 0,
+          filter: solid ? 'blur(0px)' : 'blur(14px)',
         }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         className="navbar-tear pointer-events-none absolute inset-0 -z-10"
@@ -65,8 +98,8 @@ export default function Navbar() {
 
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-6 sm:px-9">
         {/* logo (pakai SVG asli) — ikut warna teks (putih/ink) */}
-        <a href="#top" className="flex items-center">
-          <Logo height={46} className={scrolled ? 'text-ink' : 'text-white'} />
+        <a href="#top" onClick={(e) => scrollTo(e, 'top')} className="flex items-center">
+          <Logo height={46} className={solid ? 'text-ink' : 'text-white'} />
         </a>
 
         {/* nav links (desktop) — polos, tanpa pill */}
@@ -74,7 +107,8 @@ export default function Navbar() {
           {links.map((l) => (
             <a
               key={l.label}
-              href={l.href}
+              href={`#${l.target}`}
+              onClick={(e) => scrollTo(e, l.target)}
               className={`text-base fw-500 transition-colors ${
                 scrolled
                   ? 'text-ink/70 hover:text-ink'
@@ -90,6 +124,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="#contact"
+            onClick={(e) => scrollTo(e, 'contact')}
             className="group hidden items-center gap-1 rounded-full bg-ink py-2.5 pl-5 pr-4 text-sm fw-500 leading-none text-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_24px_rgba(0,0,0,0.35)] sm:inline-flex"
           >
             <span className="leading-none">Support</span>
@@ -101,7 +136,7 @@ export default function Navbar() {
           <button
             onClick={() => setOpen((v) => !v)}
             className={`grid h-10 w-10 place-items-center rounded-full ring-1 backdrop-blur-md md:hidden ${
-              scrolled ? 'bg-black/5 ring-black/10' : 'bg-white/10 ring-white/20'
+              solid ? 'bg-black/5 ring-black/10' : 'bg-white/10 ring-white/20'
             }`}
             aria-label="Menu"
           >
@@ -110,28 +145,57 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* mobile menu */}
+      {/* mobile menu — NYATU dgn navbar (bg putih dari navbar-tear di belakang,
+          ga pakai card lagi). buka = geser turun (clip height) + tiap link
+          muncul satu-satu dari atas ke bawah (stagger). */}
       <AnimatePresence>
         {open && (
           <motion.nav
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            className="mx-4 rounded-3xl bg-white p-3 text-ink shadow-xl md:hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden px-5 text-ink md:hidden"
           >
-            {links.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="block rounded-2xl px-4 py-3 text-lg fw-600 hover:bg-black/5"
+            {/* inner di-stagger: children muncul berurutan */}
+            <motion.div
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+              variants={{
+                show: { transition: { staggerChildren: 0.07, delayChildren: 0.12 } },
+                hidden: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
+              }}
+              className="flex flex-col pb-10"
+            >
+              {links.map((l) => (
+                <motion.a
+                  key={l.label}
+                  href={`#${l.target}`}
+                  onClick={(e) => scrollTo(e, l.target)}
+                  variants={{
+                    hidden: { opacity: 0, y: -14, filter: 'blur(6px)' },
+                    show: { opacity: 1, y: 0, filter: 'blur(0px)' },
+                  }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="block rounded-2xl px-1 py-2.5 text-2xl fw-700 tracking-tight transition-colors hover:text-brand"
+                >
+                  {l.label}
+                </motion.a>
+              ))}
+              <motion.a
+                href="#contact"
+                onClick={(e) => scrollTo(e, 'contact')}
+                variants={{
+                  hidden: { opacity: 0, y: -14, filter: 'blur(6px)' },
+                  show: { opacity: 1, y: 0, filter: 'blur(0px)' },
+                }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="btn btn-dark mt-3 w-full justify-center"
               >
-                {l.label}
-              </a>
-            ))}
-            <a href="#contact" onClick={() => setOpen(false)} className="btn btn-dark mt-2 w-full justify-center">
-              Support <Bi name="arrow-up-short" className="rotate-45 text-lg" />
-            </a>
+                Support <Bi name="arrow-up-short" className="rotate-45 text-lg" />
+              </motion.a>
+            </motion.div>
           </motion.nav>
         )}
       </AnimatePresence>

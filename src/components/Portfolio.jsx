@@ -45,11 +45,19 @@ export default function Portfolio() {
   const my = useMotionValue(45)
   const spotMask = useMotionTemplate`radial-gradient(circle 260px at ${mx}% ${my}%, #000 0%, #000 30%, transparent 70%)`
 
+  // throttle ke 1x per frame (rAF) — hindari getBoundingClientRect tiap
+  // event mousemove (reflow) yg bikin stutter.
+  const rafRef = useRef(0)
   const onMove = (e) => {
-    const r = ref.current?.getBoundingClientRect()
-    if (!r) return
-    mx.set(((e.clientX - r.left) / r.width) * 100)
-    my.set(((e.clientY - r.top) / r.height) * 100)
+    const { clientX, clientY } = e
+    if (rafRef.current) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
+      const r = ref.current?.getBoundingClientRect()
+      if (!r) return
+      mx.set(((clientX - r.left) / r.width) * 100)
+      my.set(((clientY - r.top) / r.height) * 100)
+    })
   }
 
   return (
@@ -64,7 +72,9 @@ export default function Portfolio() {
         alt=""
         aria-hidden="true"
         draggable="false"
-        style={{ y: yBg }}
+        decoding="async"
+        loading="lazy"
+        style={{ y: yBg, willChange: 'transform' }}
         className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-center [filter:grayscale(1)_brightness(1.05)] sm:object-cover"
       />
       {/* LAYER 1b — background berwarna, cuma tampil di area cursor (spotlight) */}
@@ -73,7 +83,9 @@ export default function Portfolio() {
         alt=""
         aria-hidden="true"
         draggable="false"
-        style={{ y: yBg, maskImage: spotMask, WebkitMaskImage: spotMask }}
+        decoding="async"
+        loading="lazy"
+        style={{ y: yBg, maskImage: spotMask, WebkitMaskImage: spotMask, willChange: 'transform, mask-image' }}
         className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-center sm:object-cover"
       />
 
@@ -94,7 +106,9 @@ export default function Portfolio() {
         src="/porto-objek.webp"
         alt="AXZY portfolio"
         draggable="false"
-        style={{ y: yObjek }}
+        decoding="async"
+        loading="lazy"
+        style={{ y: yObjek, willChange: 'transform' }}
         initial={{ scale: 1.08, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
         viewport={{ once: false, amount: 0.3 }}
@@ -108,7 +122,7 @@ export default function Portfolio() {
           style={{ y: yTitle }}
           className="pointer-events-none select-none text-center font-display leading-none"
         >
-          <BlurWord delay={0.15} className="text-stroke-dark text-[8vw] sm:text-[7vw]">
+          <BlurWord delay={0.15} className="text-stroke-bright text-[8vw] sm:text-[7vw]">
             PORTFOLIO
           </BlurWord>
         </motion.h2>

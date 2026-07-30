@@ -189,6 +189,14 @@
     -webkit-text-stroke: 0.12vw rgba(14, 15, 18, 0.55);
     text-shadow: 0 0 0.15vw rgba(14, 15, 18, 0.18);
   }
+
+  /* varian CERAH — stroke pakai warna aksen lime biar title-nya nyala
+     nembus karakter di section terang. */
+  .text-stroke-bright {
+    color: transparent;
+    -webkit-text-stroke: 0.12vw rgba(208, 209, 206, 0.247);
+    text-shadow: 0 0 0.4vw rgba(19, 18, 18, 0.5);
+  }
 }
 
 /* ===== COMPONENTS ===== */

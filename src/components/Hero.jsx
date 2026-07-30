@@ -38,11 +38,19 @@ export default function Hero() {
   // radial mask: pusat = titik cursor, warna hanya muncul di sekitar cursor
   const spotMask = useMotionTemplate`radial-gradient(circle 260px at ${mx}% ${my}%, #000 0%, #000 30%, transparent 70%)`
 
+  // throttle ke 1x per frame (rAF) — hindari getBoundingClientRect tiap
+  // event mousemove (reflow) yg bikin stutter.
+  const rafRef = useRef(0)
   const onMove = (e) => {
-    const r = ref.current?.getBoundingClientRect()
-    if (!r) return
-    mx.set(((e.clientX - r.left) / r.width) * 100)
-    my.set(((e.clientY - r.top) / r.height) * 100)
+    const { clientX, clientY } = e
+    if (rafRef.current) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
+      const r = ref.current?.getBoundingClientRect()
+      if (!r) return
+      mx.set(((clientX - r.left) / r.width) * 100)
+      my.set(((clientY - r.top) / r.height) * 100)
+    })
   }
 
   return (
@@ -58,7 +66,9 @@ export default function Hero() {
         alt=""
         aria-hidden="true"
         draggable="false"
-        style={{ y: yBg }}
+        decoding="async"
+        fetchPriority="high"
+        style={{ y: yBg, willChange: 'transform' }}
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE }}
@@ -70,7 +80,8 @@ export default function Hero() {
         alt=""
         aria-hidden="true"
         draggable="false"
-        style={{ y: yBg, maskImage: spotMask, WebkitMaskImage: spotMask }}
+        decoding="async"
+        style={{ y: yBg, maskImage: spotMask, WebkitMaskImage: spotMask, willChange: 'transform, mask-image' }}
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE }}
@@ -95,7 +106,9 @@ export default function Hero() {
         src="/hero-objek.webp"
         alt="AXZY characters"
         draggable="false"
-        style={{ y: yObjek }}
+        decoding="async"
+        fetchPriority="high"
+        style={{ y: yObjek, willChange: 'transform' }}
         initial={{ scale: 1.08, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: EASE, delay: 0.15 }}

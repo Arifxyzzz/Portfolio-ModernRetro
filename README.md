@@ -9,6 +9,13 @@ Built as a single-page experience with heavy typography, layered parallax, and a
 
 ## Tech Stack
 
+![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Motion_v11-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![Bootstrap Icons](https://img.shields.io/badge/Bootstrap_Icons-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Google Fonts](https://img.shields.io/badge/Google_Fonts-4285F4?style=for-the-badge&logo=googlefonts&logoColor=white)
+
 | Layer | Tool |
 |---|---|
 | Framework | [React 18](https://react.dev/) + [Vite 6](https://vitejs.dev/) |

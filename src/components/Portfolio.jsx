@@ -1,132 +1,105 @@
-import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate } from 'motion/react'
-import { useRef, useContext } from 'react'
+import { motion, useScroll, useTransform } from 'motion/react'
+import { useRef, useContext, Fragment } from 'react'
 import { ScrollContext } from '../scroll-context'
 import { useIsMobile } from '../use-is-mobile'
 
 const EASE = [0.22, 1, 0.36, 1]
 
-// title muncul dengan blur-in: dari blur + fade + sedikit membesar.
-const BlurWord = ({ children, delay = 0, className = '' }) => (
-  <motion.span
-    className={`block ${className}`}
-    initial={{ opacity: 0, filter: 'blur(24px)', scale: 1.06 }}
-    whileInView={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
-    viewport={{ once: false, amount: 0.4 }}
-    transition={{ duration: 1.3, ease: EASE, delay }}
-  >
-    {children}
-  </motion.span>
+const SplitTitle = ({ text, className = '', delay = 0, step = 0.05, breaks = [] }) => (
+  <span className={`title-lines mx-auto flex justify-between ${className}`}>
+    {text.split('').map((ch, i) => (
+      <Fragment key={i}>
+        {breaks
+          .filter((b) => b.at === i)
+          .map((b) => (
+            <i key={b.at + b.cls} aria-hidden="true" className={`title-br ${b.cls}`} />
+          ))}
+        <motion.span
+          className="inline-block shrink-0"
+          initial={{ opacity: 0, y: '0.18em', filter: 'blur(24px)', scale: 1.06 }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 }}
+          viewport={{ once: false, amount: 0.4 }}
+          transition={{ duration: 1, ease: EASE, delay: delay + i * step }}
+        >
+          {ch}
+        </motion.span>
+      </Fragment>
+    ))}
+  </span>
 )
 
-/* Section "PORTFOLIO" — struktur 4 layer sama kaya Hero:
-   (1) background (grayscale + spotlight warna), (2) title solid,
-   (3) objek karakter, (4) title stroke (paling depan).
-   Bedanya: teks lebih kecil, tulisan PORTFOLIO, & warna teks GELAP. */
+const BREAKS = [
+  { at: 3, cls: 'br-xs' },
+  { at: 4, cls: 'br-sm' },
+  { at: 6, cls: 'br-xs' },
+]
+
+const TitleStack = () => (
+  <h2 className="font-display leading-[0.82]">
+    <SplitTitle
+      text="PORTFOLIO"
+      delay={0.15}
+      breaks={BREAKS}
+      className="w-[3.07em] text-[27vw] sm:w-[4.19em] sm:text-[19vw]"
+    />
+  </h2>
+)
+
 export default function Portfolio() {
   const ref = useRef(null)
   const scrollEl = useContext(ScrollContext)
-  // di mobile background dibikin DIEM (ga parallax) — cukup title & objek yg
-  // gerak. yBg dipaksa 0 kalau mobile.
   const isMobile = useIsMobile()
+  const isNarrow = useIsMobile(639)
   const { scrollYProgress } = useScroll({
     target: ref,
     container: scrollEl ? { current: scrollEl } : undefined,
     offset: ['start end', 'end start'],
   })
-  // parallax halus: title & objek gerak beda kecepatan saat scroll
   const yTitle = useTransform(scrollYProgress, [0, 1], [60, -60])
   const yObjek = useTransform(scrollYProgress, [0, 1], [40, -40])
-  const yBgRaw = useTransform(scrollYProgress, [0, 1], [-30, 30])
-  // mobile: bg diem (0), desktop: parallax normal
-  const yBg = isMobile ? 0 : yBgRaw
+  const yGhostRaw = useTransform(scrollYProgress, [0, 1], [-60, 60])
+  const yGhost = isMobile ? 0 : yGhostRaw
 
-  // posisi cursor untuk spotlight warna (default di tengah)
-  const mx = useMotionValue(50)
-  const my = useMotionValue(45)
-  const spotMask = useMotionTemplate`radial-gradient(circle 260px at ${mx}% ${my}%, #000 0%, #000 30%, transparent 70%)`
-
-  // throttle ke 1x per frame (rAF) — hindari getBoundingClientRect tiap
-  // event mousemove (reflow) yg bikin stutter.
-  const rafRef = useRef(0)
-  const onMove = (e) => {
-    const { clientX, clientY } = e
-    if (rafRef.current) return
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = 0
-      const r = ref.current?.getBoundingClientRect()
-      if (!r) return
-      mx.set(((clientX - r.left) / r.width) * 100)
-      my.set(((clientY - r.top) / r.height) * 100)
-    })
-  }
+  const stackBox =
+    'pointer-events-none absolute inset-0 flex select-none flex-col items-center justify-center px-5 text-center'
 
   return (
     <section
+      id="work"
       ref={ref}
-      onMouseMove={onMove}
-      className="relative aspect-[2940/1672] overflow-hidden bg-paper text-ink sm:aspect-auto sm:min-h-screen"
+      className="grid-blue relative flex min-h-[80svh] flex-col overflow-hidden text-white sm:min-h-screen"
     >
-      {/* LAYER 1a — background abu-abu (saturasi 0) */}
-      <motion.img
-        src="/porto-background.webp"
-        alt=""
+      <motion.span
         aria-hidden="true"
-        draggable="false"
-        decoding="async"
-        loading="lazy"
-        style={{ y: yBg, willChange: 'transform' }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-center [filter:grayscale(1)_brightness(1.05)] sm:object-cover"
-      />
-      {/* LAYER 1b — background berwarna, cuma tampil di area cursor (spotlight) */}
-      <motion.img
-        src="/porto-background.webp"
-        alt=""
-        aria-hidden="true"
-        draggable="false"
-        decoding="async"
-        loading="lazy"
-        style={{ y: yBg, maskImage: spotMask, WebkitMaskImage: spotMask, willChange: 'transform, mask-image' }}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-center sm:object-cover"
-      />
+        style={{ y: yGhost }}
+        className="text-hairline pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 select-none font-display text-[38vw] leading-none"
+      >
+        2727
+      </motion.span>
 
-      {/* LAYER 2 — title PORTFOLIO solid (di antara bg & objek) */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <motion.h2
-          style={{ y: yTitle }}
-          className="pointer-events-none select-none text-center font-display leading-none text-ink drop-shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
-        >
-          <BlurWord delay={0.15} className="text-[8vw] sm:text-[7vw]">
-            PORTFOLIO
-          </BlurWord>
-        </motion.h2>
-      </div>
+      <motion.div style={{ y: yTitle }} className={`${stackBox} z-10`}>
+        <TitleStack />
+      </motion.div>
 
-      {/* LAYER 3 — objek karakter (size & posisi = background) */}
-      <motion.img
-        src="/porto-objek.webp"
-        alt="AXZY portfolio"
-        draggable="false"
-        decoding="async"
-        loading="lazy"
-        style={{ y: yObjek, willChange: 'transform' }}
-        initial={{ scale: 1.08, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        viewport={{ once: false, amount: 0.3 }}
-        transition={{ duration: 1.4, ease: EASE, delay: 0.1 }}
-        className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-contain object-center drop-shadow-[0_30px_50px_rgba(0,0,0,0.35)] sm:object-cover"
-      />
+      <motion.div
+        style={{ y: yObjek }}
+        className="pointer-events-none absolute inset-x-0 bottom-[33%] z-20 mx-auto h-[30%] w-full select-none [filter:drop-shadow(14px_18px_10px_rgba(2,6,32,0.45))_drop-shadow(34px_44px_40px_rgba(2,6,32,0.32))] sm:bottom-[22%] sm:h-[32%] lg:bottom-[30%] lg:h-[44%]"
+      >
+        <motion.img
+          src="/Object-2.webp"
+          alt="AXZY portfolio"
+          draggable="false"
+          decoding="async"
+          loading="lazy"
+          style={{ willChange: 'transform' }}
+          initial={{ scale: 1, opacity: 0 }}
+          whileInView={{ scale: isNarrow ? 1.35 : 1.7, opacity: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 1.4, ease: EASE, delay: 0.1 }}
+          className="h-full w-full select-none object-contain object-center"
+        />
+      </motion.div>
 
-      {/* LAYER 4 — title PORTFOLIO stroke gelap (paling depan, tetap kebaca nembus karakter) */}
-      <div className="absolute inset-0 z-30 flex items-center justify-center">
-        <motion.h2
-          style={{ y: yTitle }}
-          className="pointer-events-none select-none text-center font-display leading-none"
-        >
-          <BlurWord delay={0.15} className="text-stroke-bright text-[8vw] sm:text-[7vw]">
-            PORTFOLIO
-          </BlurWord>
-        </motion.h2>
-      </div>
     </section>
   )
 }

@@ -3,7 +3,6 @@ import { Bi } from './Icons'
 
 const EASE = [0.22, 1, 0.36, 1]
 
-/* bintang pemisah marquee (Star.svg di-mask, warna lime) */
 const Star = ({ className = '' }) => (
   <span
     aria-hidden="true"
@@ -15,7 +14,6 @@ const Star = ({ className = '' }) => (
   />
 )
 
-/* skill marquee */
 const SKILLS = [
   'SCRIPTING',
   'GRAPHIC DESIGN',
@@ -24,13 +22,11 @@ const SKILLS = [
   'ROBLOX',
 ]
 
-/* tombol kontak */
 const CONTACTS = [
   { label: 'Github', icon: 'github', href: '#' },
   { label: 'Discord', icon: 'discord', href: '#' },
 ]
 
-/* 1 blok marquee (dirender 2x biar loop mulus) */
 const MarqueeRow = () => (
   <div className="flex shrink-0 items-center gap-8 pr-8">
     {SKILLS.map((s) => (
@@ -49,9 +45,7 @@ export default function LetsBuildIt() {
       className="relative overflow-hidden text-white"
     >
       <div className="mx-auto max-w-[1400px] px-6 pb-0 pt-24 sm:px-9 sm:pt-28">
-        {/* baris atas: heading + kontak */}
         <div className="flex flex-col gap-12 md:flex-row md:items-stretch md:justify-between">
-          {/* heading */}
           <motion.h2
             initial={{ opacity: 0, y: 40, filter: 'blur(18px)' }}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -63,7 +57,6 @@ export default function LetsBuildIt() {
             <span className="block text-lime">BUILD IT.</span>
           </motion.h2>
 
-          {/* kanan: teks (atas) + tombol (bawah) */}
           <motion.div
             initial={{ opacity: 0, y: 30, filter: 'blur(14px)' }}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -88,11 +81,9 @@ export default function LetsBuildIt() {
                   transition={{ duration: 0.6, ease: EASE, delay: 0.3 + i * 0.1 }}
                   className="group inline-flex shrink-0 items-stretch overflow-hidden rounded-2xl bg-ink text-sm fw-600 leading-none shadow-[0_2px_8px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_24px_rgba(0,0,0,0.4)] sm:text-base"
                 >
-                  {/* kotak ikon (lime, 1:1, takik kanan-atas) */}
                   <span className="flex aspect-square w-11 shrink-0 items-center justify-center self-stretch rounded-2xl rounded-tr-none bg-lime text-ink sm:w-auto">
                     <Bi name={c.icon} className="text-xl leading-none sm:text-2xl" />
                   </span>
-                  {/* label */}
                   <span className="flex shrink-0 items-center whitespace-nowrap py-3.5 pl-4 pr-6 sm:py-4 sm:pl-5 sm:pr-12">{c.label}</span>
                 </motion.a>
               ))}
@@ -101,7 +92,6 @@ export default function LetsBuildIt() {
         </div>
       </div>
 
-      {/* strip marquee */}
       <div className="relative mt-20 flex overflow-hidden border-b border-white/15 py-4">
         <div className="animate-marquee flex min-w-full shrink-0 items-center">
           <MarqueeRow />

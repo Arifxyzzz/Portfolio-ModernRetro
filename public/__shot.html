@@ -1,0 +1,90 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>shot</title>
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#1b3ce0; }
+  #win { position:fixed; inset:0; overflow:hidden; }
+  #f { position:absolute; left:0; top:0; border:0; display:block; }
+</style>
+<div id="win"><iframe id="f" src="/?static"></iframe></div>
+<pre id="dbg" style="position:fixed;left:0;top:0;z-index:9;margin:0;padding:3px 7px;background:#000;color:#0f0;font:11px monospace">init</pre>
+<script>
+  /* harness screenshot. dua cara yang "wajar" dua-duanya gagal:
+       - mode normal: bisa discroll, TAPI `whileInView` (IntersectionObserver)
+         ga ke-trigger di bawah --virtual-time-budget -> judul & karakter
+         ketinggalan di opacity 0.
+       - `?static`: semua dipaksa kelihatan, TAPI SimpleBar dilepas
+         `h-screen`-nya jadi ga ada yang scrollable (scrollTop nempel 0).
+     jadi: tetep `?static`, iframe ditinggiin sepenuh dokumen, lalu digeser
+     pakai `top` negatif. ga ada scroll sama sekali, ga ada yang bisa nolak.
+
+     ?w=390 -> lebar iframe DIKUNCI 390px. penting: headless suka render
+     lebih lebar dari --window-size, dan semua ukuran judul pakai `vw`, jadi
+     tanpa ini angkanya ngaco. di dalam iframe `100vw` = lebar iframe. */
+  const qs = new URLSearchParams(location.search);
+  const sec = qs.get('sec') || 'work';
+  const f = document.getElementById('f');
+  const dbg = document.getElementById('dbg');
+
+  const W = Number(qs.get('w')) || 0;
+  if (W) { f.style.width = W + 'px'; document.getElementById('win').style.width = W + 'px'; }
+  else f.style.width = '100vw';
+
+  f.addEventListener('load', () => {
+    const tick = (n = 0) => {
+      const d = f.contentDocument;
+      const el = d.getElementById(sec);
+      if (!el || !el.offsetHeight) return setTimeout(() => tick(n), 60);
+
+      // iframe ditinggiin sepenuh dokumen dulu — kalau ngga, bagian bawah
+      // ga ke-layout dan posisinya salah.
+      f.style.height = d.documentElement.scrollHeight + 'px';
+
+      const r = el.getBoundingClientRect();
+      const top = r.top + (r.height - window.innerHeight) / 2;
+      f.style.top = -Math.max(0, top) + 'px';
+
+      const h2 = el.querySelector('h2');
+      const img = el.querySelector('img');
+      const fmt = (x) => {
+        if (!x) return '-';
+        const b = x.getBoundingClientRect();
+        return Math.round(b.width) + 'x' + Math.round(b.height);
+      };
+
+      /* bayangan objek GA BISA dicek lewat jalur normal: `?static` maksa
+         `filter:none !important` ke semua elemen. jadi: lepas sebentar
+         `data-static`, baca filter ASLI dari kelasnya, pasang lagi
+         data-static, lalu tempel nilainya sebagai inline !important —
+         inline !important ngalahin !important stylesheet. */
+      let shadow = '-';
+      const wrap = img && img.parentElement;
+      if (wrap) {
+        d.documentElement.removeAttribute('data-static');
+        shadow = f.contentWindow.getComputedStyle(wrap).filter || 'none';
+        d.documentElement.setAttribute('data-static', '');
+        wrap.style.setProperty('filter', shadow, 'important');
+      }
+
+      /* posisi vertikal objek vs judul, dari ANGKA: bawah judul vs atas
+         objek (gap negatif = overlap), plus jarak objek ke dasar section. */
+      let pos = '-';
+      if (h2 && wrap) {
+        const hb = h2.getBoundingClientRect();
+        const wb = wrap.getBoundingClientRect();
+        const sb = el.getBoundingClientRect();
+        pos = 'gap(judul->objek)=' + Math.round(wb.top - hb.bottom) +
+          ' objekBawah->dasar=' + Math.round(sb.bottom - wb.bottom);
+      }
+
+      dbg.textContent = 'n=' + n + ' vw=' + f.clientWidth +
+        ' title=' + fmt(h2) + ' img=' + fmt(img) +
+        '\n' + pos + '\nshadow=' + shadow;
+
+      // diulang: tinggi masih berubah (font .otf + gambar lazy) setelah
+      // ukuran pertama, jadi posisinya perlu disusul terus.
+      if (n < 40) setTimeout(() => tick(n + 1), 150);
+    };
+    f.contentDocument.fonts.ready.then(() => tick()).catch(() => tick());
+  });
+</script>

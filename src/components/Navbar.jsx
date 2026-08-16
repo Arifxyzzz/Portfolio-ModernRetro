@@ -14,19 +14,12 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  // scrolled: true kalau halaman udah di-scroll turun -> navbar jadi panel
-  // putih + sobekan bawah + teks gelap biar nyatu & kebaca di atas konten.
-  // forceSolid: verifikasi headless (?nav=solid) — paksa state scrolled.
   const forceSolid =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('nav') === 'solid'
   const [scrolled, setScrolled] = useState(forceSolid)
   const scrollEl = useContext(ScrollContext)
-  // di mobile navbar SELALU solid (panel putih) — biar logo AXZY + menu
-  // kebaca (bg navbar putih) & title hero AXZY yg mepet atas ga keliatan
-  // nabrak logo (ketutup panel putih). desktop tetap ngikut scroll.
   const isMobile = useIsMobile()
-  // solid = tampilan panel putih + teks gelap.
   const solid = scrolled || open || isMobile
 
   useEffect(() => {
@@ -34,9 +27,6 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [open])
 
-  // smooth-scroll ke section TANPA ngubah URL (ga ada /#top di address bar).
-  // scroll via container SimpleBar (fallback window). '#top' -> ke paling atas.
-  // section lain: posisi target dikurangi tinggi navbar biar ga ketutup.
   const scrollTo = (e, id) => {
     e.preventDefault()
     setOpen(false)
@@ -47,8 +37,6 @@ export default function Navbar() {
       container.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
-    // offset navbar: di desktop navbar fixed (~94px), di mobile navbar ikut
-    // flow (relative) jadi ga perlu offset.
     const navH = isMobile ? 0 : 94
     if (scrollEl) {
       const top = scrollEl.scrollTop + el.getBoundingClientRect().top - navH
@@ -59,7 +47,6 @@ export default function Navbar() {
     }
   }
 
-  // dengerin scroll dari container SimpleBar (fallback window kalau null)
   useEffect(() => {
     if (forceSolid) return
     const target = scrollEl ?? window
@@ -81,10 +68,6 @@ export default function Navbar() {
         solid ? 'text-ink' : 'text-white'
       }`}
     >
-      {/* panel putih + sobekan bawah sebagai LAYER terpisah di belakang, biar
-          bisa di-animate blur-in mulus (background/mask ga bisa transisi CSS).
-          juga muncul saat menu mobile kebuka -> seluruh area (baris logo +
-          list) nyatu jadi satu panel navbar, ga perlu card terpisah. */}
       <motion.div
         aria-hidden="true"
         initial={false}
@@ -97,12 +80,10 @@ export default function Navbar() {
       />
 
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-6 sm:px-9">
-        {/* logo (pakai SVG asli) — ikut warna teks (putih/ink) */}
         <a href="#top" onClick={(e) => scrollTo(e, 'top')} className="flex items-center">
           <Logo height={46} className={solid ? 'text-ink' : 'text-white'} />
         </a>
 
-        {/* nav links (desktop) — polos, tanpa pill */}
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 md:flex">
           {links.map((l) => (
             <a
@@ -120,7 +101,6 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* CTA */}
         <div className="flex items-center gap-3">
           <a
             href="#contact"
@@ -145,9 +125,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* mobile menu — NYATU dgn navbar (bg putih dari navbar-tear di belakang,
-          ga pakai card lagi). buka = geser turun (clip height) + tiap link
-          muncul satu-satu dari atas ke bawah (stagger). */}
       <AnimatePresence>
         {open && (
           <motion.nav
@@ -157,7 +134,6 @@ export default function Navbar() {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden px-5 text-ink md:hidden"
           >
-            {/* inner di-stagger: children muncul berurutan */}
             <motion.div
               initial="hidden"
               animate="show"

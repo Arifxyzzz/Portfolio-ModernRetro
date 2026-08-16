@@ -2,7 +2,6 @@ import { motion } from 'motion/react'
 
 const EASE = [0.22, 1, 0.36, 1]
 
-/* bintang (Star.svg di-mask, warna lime) */
 const Star = ({ className = '' }) => (
   <span
     aria-hidden="true"
@@ -16,11 +15,8 @@ const Star = ({ className = '' }) => (
 
 export default function RatingTicket() {
   return (
-    /* dua blok full-height: gelap (kiri) & putih (kanan). sobekan = batas
-       antara dua warna itu. background full-bleed, konten ikut max-w web. */
     <section className="overflow-hidden bg-ticket text-white">
       <div className="relative mx-auto flex max-w-[1400px] items-stretch pl-6 sm:pl-9">
-        {/* badan gelap: heading + rating */}
         <motion.div
           initial={{ opacity: 0, y: 40, filter: 'blur(14px)' }}
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -28,12 +24,10 @@ export default function RatingTicket() {
           transition={{ duration: 0.9, ease: EASE }}
           className="flex flex-1 flex-col items-start gap-10 py-16 pr-6 sm:py-24 sm:pr-14 md:flex-row md:items-center md:justify-between md:gap-12 md:pr-10"
         >
-          {/* kiri: heading + bintang */}
           <div className="flex flex-col gap-6 sm:gap-8">
             <h3 className="max-w-[15ch] font-jakarta text-[2.25rem] fw-600 leading-[1.08] tracking-tight text-white sm:text-6xl md:text-[4.25rem]">
               I don&rsquo;t just design visuals. I craft experiences.
             </h3>
-            {/* bintang muncul satu-satu (stagger) pas viewport, ilang pas kelewat */}
             <div className="flex gap-2 sm:gap-3">
               {Array.from({ length: 5 }).map((_, i) => (
                 <motion.span
@@ -50,7 +44,6 @@ export default function RatingTicket() {
             </div>
           </div>
 
-          {/* kanan: rating (di mobile rata kiri, desktop rata kanan) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, filter: 'blur(12px)' }}
             whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
@@ -67,9 +60,6 @@ export default function RatingTicket() {
           </motion.div>
         </motion.div>
 
-        {/* stub putih full-height — #027 vertikal (Moderniz).
-            tepi KIRI-nya digigit takik (ticket-tear) = efek sobekan sama
-            kaya navbar/footer. */}
         <div className="ticket-tear relative flex w-16 shrink-0 items-center justify-center pl-3 sm:w-52 sm:pl-4">
           <span
             className="hidden font-display tracking-tight text-ticket sm:block sm:text-8xl"
@@ -79,9 +69,6 @@ export default function RatingTicket() {
           </span>
         </div>
 
-        {/* filler putih full-bleed ke KANAN: nempel di tepi kanan container
-            (left-full) lalu ngulur w-screen sampe mentok tepi layar. ditaruh
-            di LUAR stub (yg kena mask ticket-tear) biar ga ikut kepotong. */}
         <div aria-hidden="true" className="absolute inset-y-0 left-full w-screen bg-white" />
       </div>
     </section>

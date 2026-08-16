@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
 
-// true kalau viewport <= breakpoint (default 767px = di bawah `sm:` Tailwind).
-// dipakai buat: navbar mobile selalu solid (logo/menu kebaca) & mematikan
-// parallax background di mobile biar diem.
 export function useIsMobile(maxWidth = 767) {
   const query = `(max-width: ${maxWidth}px)`
   const [isMobile, setIsMobile] = useState(

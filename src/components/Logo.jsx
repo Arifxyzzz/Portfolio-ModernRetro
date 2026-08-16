@@ -1,4 +1,3 @@
-// Logo AxzyCreative dirender via CSS mask supaya warnanya ikut `currentColor`.
 const RATIO = 26458.32 / 5938.16
 
 export default function Logo({ height = 22, className = '' }) {

@@ -3,7 +3,6 @@ import { Bi } from './Icons'
 
 const EASE = [0.22, 1, 0.36, 1]
 
-/* data testimoni (dari portfolio lama axzyhub.com) */
 const ITEMS = [
   { name: 'SZ', role: 'Admin, HelsClub', text: 'UI-nya keren banget, clean dan nggak norak.', image: 'https://ugc.production.linktr.ee/af312b25-6797-4f15-8a00-f36ad9839415_Tambahkan-JudulHELS-CLUB-20251002-121754-0000.jpeg?io=true&size=avatar-v3_0' },
   { name: 'Zyrex', role: 'Customer', text: 'GUI hasil redesign-nya rapi banget dan responsif di semua device. Dipakai di berbagai screen tetap enak dilihat dan digunakan.', image: 'https://i.pinimg.com/736x/58/32/92/583292a5f8212b0942beac955c555a6c.jpg' },
@@ -16,11 +15,9 @@ const ITEMS = [
   { name: 'anmx14', role: 'Customer', text: 'The service is fast, and the response is also clear. The result meets expectations.', image: 'https://cdn.builtbybit.com/avatars/s/546/546990.jpg?1743150760' },
 ]
 
-/* 1 kartu testimoni */
 const Card = ({ t }) => (
   <figure className="relative w-[320px] shrink-0 rounded-3xl rounded-br-[3.5rem] bg-paper p-6 shadow-[0_20px_40px_-16px_rgba(0,0,0,0.35)]">
     <Bi name="quote" className="absolute right-4 top-4 text-3xl leading-none text-ink/45" />
-    {/* header: avatar + nama + role */}
     <figcaption className="mb-4 flex items-center gap-3">
       <img
         src={t.image}
@@ -38,7 +35,6 @@ const Card = ({ t }) => (
   </figure>
 )
 
-/* 1 blok baris (dirender 2x biar loop mulus) */
 const Row = ({ items }) => (
   <div className="flex shrink-0 items-stretch gap-6 pr-6">
     {items.map((t, i) => (
@@ -48,13 +44,11 @@ const Row = ({ items }) => (
 )
 
 export default function Testimonials() {
-  // baris 2 di-rotate biar susunannya beda dari baris 1
   const rowA = ITEMS
   const rowB = [...ITEMS.slice(2), ...ITEMS.slice(0, 2)]
 
   return (
     <section className="relative overflow-hidden pb-6 pt-14 text-white sm:pt-16">
-      {/* label kecil + heading */}
       <motion.p
         initial={{ opacity: 0, y: 20, filter: 'blur(12px)' }}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -74,9 +68,6 @@ export default function Testimonials() {
         Kind words from people<br className="hidden sm:block" /> I&apos;ve worked with.
       </motion.h2>
 
-      {/* dua baris marquee, arah berlawanan, tepi nge-fade.
-          py gede + gap: kasih ruang buat shadow card biar ga kepotong
-          (shadow-nya jatuh ~24px ke bawah). */}
       <motion.div
         initial={{ opacity: 0, filter: 'blur(16px)' }}
         whileInView={{ opacity: 1, filter: 'blur(0px)' }}
@@ -90,7 +81,6 @@ export default function Testimonials() {
             'linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)',
         }}
       >
-        {/* baris 1: geser ke kiri. hover di baris ini -> jeda (grup sendiri) */}
         <div className="group flex">
           <div className="animate-marquee flex shrink-0 items-stretch group-hover:[animation-play-state:paused]">
             <Row items={rowA} />
@@ -102,7 +92,6 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* baris 2: geser ke kanan. hover di baris ini -> jeda (grup sendiri) */}
         <div className="group flex">
           <div className="animate-marquee-rev flex shrink-0 items-stretch group-hover:[animation-play-state:paused]">
             <Row items={rowB} />

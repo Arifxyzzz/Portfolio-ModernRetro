@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap');
 @import 'simplebar-react/dist/simplebar.min.css';
 @import 'tailwindcss';
 
-/* ===== FONTS =====
-   - Figtree: font umum (body, nav, dll).
-   - Moderniz: HANYA display besar ("Our Services" & "Let's Build It"). */
 @font-face {
   font-family: 'Moderniz';
   src: url('/fonts/Moderniz.otf') format('opentype');
   font-weight: 400 900;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Azonix';
+  src: url('/fonts/Azonix.otf') format('opentype');
+  font-weight: 400 900;
+  font-display: swap;
+}
 
-/* ===== THEME TOKENS ===== */
 @theme {
   --color-brand: #1b3ce0;
   --color-brand-600: #1631c4;
@@ -26,6 +26,7 @@
   --color-muted: #6b7280;
 
   --font-display: 'Moderniz', system-ui, sans-serif;
+  --font-azonix: 'Azonix', system-ui, sans-serif;
   --font-sans: 'Figtree', system-ui, sans-serif;
   --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
@@ -35,18 +36,15 @@
   50% { transform: translateY(-14px); }
 }
 
-/* marquee: geser 1 blok penuh ke kiri (2 blok identik -> loop mulus) */
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-100%); }
 }
-/* marquee-rev: kebalikannya, geser ke kanan */
 @keyframes marquee-rev {
   from { transform: translateX(-100%); }
   to { transform: translateX(0); }
 }
 
-/* ===== BASE ===== */
 @layer base {
   html { scroll-behavior: smooth; }
   body {
@@ -57,14 +55,13 @@
   }
   ::selection { background: var(--color-lime); color: var(--color-ink); }
 
-  /* sembunyiin scrollbar native total — kita pakai SimpleBar (custom). */
   html { scrollbar-width: none; }
   ::-webkit-scrollbar { display: none; }
 }
 
-/* ===== UTILITIES ===== */
 @layer utilities {
   .font-display { font-family: var(--font-display); }
+  .font-azonix { font-family: var(--font-azonix); }
   .font-jakarta { font-family: var(--font-jakarta); }
 
   .fw-400 { font-weight: 400; }
@@ -73,8 +70,6 @@
   .fw-700 { font-weight: 700; }
   .fw-800 { font-weight: 800; }
 
-  /* blue grid background (pengganti minecraft) — garis tipis banget,
-     cuma tekstur halus, ga ketara. */
   .grid-blue {
     background-color: var(--color-brand);
     background-image:
@@ -87,19 +82,11 @@
   .animate-marquee { animation: marquee 26s linear infinite; }
   .animate-marquee-rev { animation: marquee-rev 32s linear infinite; }
 
-  /* ===== FOOTER NOTCH (sobekan tiket) =====
-     band #252525 dikasih takik di tepi ATAS berbentuk persegi-panjang
-     dengan sudut BAWAH rounded (mirip lekukan card Support), tersebar
-     jarang dengan gap.
-     Caranya: band-nya solid, lalu ::before nempel di tepi atas berwarna
-     PAPER (putih, senada halaman di atasnya) yang di-mask jadi HANYA
-     bentuk notch. Jadi seolah band-nya "digigit" takik. Simpel & stabil,
-     ga ada calc/2-layer yang bikin garis nyasar. */
   .footer-tear {
     position: relative;
     background-color: var(--color-ticket);
-    --notch-h: 13px;     /* kedalaman takik */
-    --notch-step: 150px; /* 1 takik + 1 gap: 75 takik + 75 gap = 150 (sama lebar) */
+    --notch-h: 13px;
+    --notch-step: 150px;
   }
   .footer-tear::before {
     content: "";
@@ -109,20 +96,10 @@
     right: 0;
     height: var(--notch-h);
     background-color: var(--color-paper);
-    /* mask = bentuk notch (sobekan) di viewBox 150x13:
-       - lebar takik = lebar gap = 75 (takik dari x=37.5..112.5).
-       - sudut bawah rounded SEPEREMPAT: radius kecil (5), sisi kiri/kanan
-         tetap TEGAK lurus, dasar tengah flat. bukan bahu setengah-lingkaran. */
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 13'%3E%3Cpath fill='%23000' d='M37.5,0 L37.5,8 Q37.5,13 42.5,13 L107.5,13 Q112.5,13 112.5,8 L112.5,0 Z'/%3E%3C/svg%3E") center top / var(--notch-step) var(--notch-h) repeat-x;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 13'%3E%3Cpath fill='%23000' d='M37.5,0 L37.5,0 Q37.5,13 50.5,13 L99.5,13 Q112.5,13 112.5,0 L112.5,0 Z'/%3E%3C/svg%3E") center top / var(--notch-step) var(--notch-h) repeat-x;
   }
 
-  /* ===== NAVBAR TEAR (sobekan tiket, tepi BAWAH) =====
-     kebalikan footer: panel PUTIH yang tepi BAWAH-nya "digigit" takik,
-     jadi transparan di bagian notch (konten di belakang keliatan).
-     caranya: mask 2 layer -> (1) gradient nutup seluruh badan panel di atas
-     strip notch, (2) SVG mask di strip bawah yang OPAQUE di gap & BOLONG di
-     notch (evenodd: rect - tab). */
   .navbar-tear {
     background-color: var(--color-paper);
     --notch-h: 13px;
@@ -135,17 +112,10 @@
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 13'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M0,0 H150 V13 H0 Z M37.5,13 L37.5,13 A13,13 0 0 1 50.5,0 L99.5,0 A13,13 0 0 1 112.5,13 Z'/%3E%3C/svg%3E") center bottom / var(--notch-step) var(--notch-h) repeat-x;
   }
 
-  /* ===== TICKET TEAR (sobekan tiket, tepi KIRI — vertikal) =====
-     versi vertikal dari navbar/footer-tear. panel PUTIH yang tepi KIRI-nya
-     "digigit" takik rounded, jadi transparan di notch (bg gelap di belakang
-     keliatan) -> efek sobekan tiket di batas gelap/putih.
-     caranya sama kaya navbar-tear (mask 2 layer), cuma sumbunya diputar:
-       (1) gradient nutup badan panel KECUALI strip kiri selebar notch,
-       (2) SVG mask di strip kiri, OPAQUE di gap & BOLONG di notch. */
   .ticket-tear {
     background-color: var(--color-paper);
-    --notch-w: 16px;      /* kedalaman takik */
-    --notch-step: 120px;  /* 1 takik + 1 gap (periode vertikal) */
+    --notch-w: 16px;
+    --notch-step: 120px;
     -webkit-mask:
       linear-gradient(#000, #000) right center / calc(100% - var(--notch-w)) 100% no-repeat,
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 120'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M0,0 H16 V120 H0 Z M0,30 L10,30 Q16,30 16,36 L16,84 Q16,90 10,90 L0,90 Z'/%3E%3C/svg%3E") left center / var(--notch-w) var(--notch-step) repeat-y;
@@ -154,12 +124,6 @@
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 120'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M0,0 H16 V120 H0 Z M0,30 L16,30 A30,30 0 0 1 16,90 L0,90 Z'/%3E%3C/svg%3E") left center / var(--notch-w) var(--notch-step) repeat-y;
   }
 
-  /* ===== ABOUT TEAR (sobekan SATU sisi di batas About/Services) =====
-     cuma tepi BAWAH About (gelap) yang disobek — Services (putih) ditumpuk
-     dikit di belakang (overlap), jadi gigi sobekan nampilin putih Services.
-     satu sisi aja biar tetep NYATU (bukan dua-duanya kepotong).
-     teknik = navbar-tear: mask 2 layer, bahu arc bulat.
-     LUBANG = GAP: takik lebar 85 (=1/2 step 170), center di tengah tile. */
   .about-tear {
     --th: 10px;
     --notch-step: 170px;
@@ -171,35 +135,26 @@
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 10'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M0,0 H170 V10 H0 Z M42.5,10 A10,10 0 0 1 52.5,0 L117.5,0 A10,10 0 0 1 127.5,10 Z'/%3E%3C/svg%3E") center bottom / var(--notch-step) var(--th) repeat-x;
   }
 
-  /* outline text (AXZY highlight di depan karakter) — hairline PROPORSIONAL.
-     pakai vw, bukan 1px absolut: tebal stroke ikut skala font (juga vw),
-     jadi rasionya konstan & stabil di semua resolusi / DPI.
-     alpha diturunin biar putihnya ga ketara, tapi text-shadow tipis
-     bikin edge-nya tetep kebaca. */
-  .text-stroke {
-    color: transparent;
-    -webkit-text-stroke: 0.12vw rgba(255, 255, 255, 0.55);
-    text-shadow: 0 0 0.15vw rgba(255, 255, 255, 0.18);
+  .title-lines {
+    flex-wrap: wrap;
+  }
+  .title-lines > .title-br {
+    flex-basis: 100%;
+    height: 0;
+    margin-left: auto;
+  }
+  .title-lines > .br-sm { display: none; }
+  @media (min-width: 640px) {
+    .title-lines > .br-xs { display: none; }
+    .title-lines > .br-sm { display: block; }
   }
 
-  /* varian GELAP dari .text-stroke — buat section terang (Portfolio),
-     stroke pakai warna ink/gelap biar kebaca di atas background putih. */
-  .text-stroke-dark {
+  .text-hairline {
     color: transparent;
-    -webkit-text-stroke: 0.12vw rgba(14, 15, 18, 0.55);
-    text-shadow: 0 0 0.15vw rgba(14, 15, 18, 0.18);
-  }
-
-  /* varian CERAH — stroke pakai warna aksen lime biar title-nya nyala
-     nembus karakter di section terang. */
-  .text-stroke-bright {
-    color: transparent;
-    -webkit-text-stroke: 0.12vw rgba(208, 209, 206, 0.247);
-    text-shadow: 0 0 0.4vw rgba(19, 18, 18, 0.5);
+    -webkit-text-stroke: 0.1vw rgba(255, 255, 255, 0.1);
   }
 }
 
-/* ===== COMPONENTS ===== */
 @layer components {
   .btn {
     display: inline-flex;
@@ -217,33 +172,23 @@
   .btn-dark:hover { background: #000; }
 }
 
-/* ===== SIMPLEBAR (scrollbar custom) — override style default library =====
-   track background putih; thumb = balok penuh selebar track (tanpa padding),
-   TANPA rounded, cuma panjangnya yang otomatis ngikut konten. */
 .simplebar-track {
   background-color: var(--color-paper);
 }
 .simplebar-scrollbar::before {
   background-color: var(--color-ticket);
-  border-radius: 0; /* tanpa rounded */
-  /* balok penuh: hilangkan inset default library (atas/bawah/kiri/kanan 0) */
+  border-radius: 0;
   inset: 0;
-  /* library nge-fade thumb pakai opacity; paksa selalu keliatan */
   opacity: 1 !important;
 }
 .simplebar-scrollbar:hover::before { background-color: #000; }
-/* lebar track = lebar thumb (balok penuh, ga ramping) */
 .simplebar-track.simplebar-vertical { width: 10px; }
 .simplebar-track.simplebar-horizontal { height: 10px; }
 
-/* di perangkat TOUCH (HP/tablet, pointer kasar) scroll pakai sentuhan —
-   ga butuh scrollbar permanen. sembunyiin track custom SimpleBar biar ga
-   nongol di mobile. desktop (pointer halus) tetep nampilin balok custom. */
 @media (pointer: coarse) {
   .simplebar-track { display: none !important; }
 }
 
-/* ===== MOTION SAFETY + STATIC (verifikasi headless) ===== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -252,5 +197,6 @@
   }
 }
 html[data-static] * { opacity: 1 !important; transform: none !important; }
-/* hero dipendekin cuma saat verifikasi headless supaya footer ikut ke-capture */
-html[data-static] section#top { min-height: 620px !important; }
+html[data-static] * { filter: none !important; }
+html[data-static] section#top,
+html[data-static] section#work { min-height: 760px !important; }

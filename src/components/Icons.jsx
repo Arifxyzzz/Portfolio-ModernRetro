@@ -1,10 +1,7 @@
-// Wrapper tipis untuk Bootstrap Icons (font sudah di-import di main.jsx).
-// Pemakaian: <Bi name="arrow-up-right" className="text-lg" />
 export function Bi({ name, className = '' }) {
   return <i className={`bi bi-${name} ${className}`} aria-hidden="true" />
 }
 
-// Shortcut yang sering dipakai supaya markup lebih enak dibaca.
 export const IconArrow = (p) => <Bi name="arrow-up-right" {...p} />
 export const IconArrowDown = (p) => <Bi name="arrow-down" {...p} />
 export const IconGithub = (p) => <Bi name="github" {...p} />

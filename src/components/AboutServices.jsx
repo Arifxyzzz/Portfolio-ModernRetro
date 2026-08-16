@@ -3,7 +3,6 @@ import { Bi } from './Icons'
 
 const EASE = [0.22, 1, 0.36, 1]
 
-/* ikon tool (SVG di-mask biar bisa diwarnain) */
 const ToolIcon = ({ src, className = '' }) => (
   <span
     aria-hidden="true"
@@ -15,21 +14,18 @@ const ToolIcon = ({ src, className = '' }) => (
   />
 )
 
-/* tools */
 const TOOLS = [
   { src: '/icons/CorelDraw.svg', label: 'CorelDRAW' },
   { src: '/icons/Lua.svg', label: 'LuaScript' },
   { src: '/icons/Roblox.svg', label: 'RobloxStudio' },
 ]
 
-/* daftar layanan (kolom kiri) */
 const SERVICES = [
   ['GRAPHIC', 'DESIGN'],
   ['ROBLOX UI', 'DESIGN'],
   ['ROBLOX', 'SCRIPTING'],
 ]
 
-/* isi 3 card */
 const CARDS = [
   { title: ['HIGH', 'QUALITY'], pill: 'A clean and neat', highlight: 'interface', float: true },
   { title: ['CUSTOM', 'SOLUTION'], pill: 'Built for your', highlight: 'needs', arrow: true },
@@ -39,29 +35,19 @@ const CARDS = [
 export default function AboutServices() {
   return (
     <section id="about" className="relative">
-      {/* ===== ABOUT (gelap) ===== */}
-      {/* z-[30]: harus di atas objek hero (z-20) */}
       <div className="relative z-[30] text-white">
-        {/* bg: gambar + base gelap, dikasih sobekan (mask) */}
-        <div className="about-tear absolute inset-0 overflow-hidden bg-ticket">
-          <img
-            src="https://images5.alphacoders.com/140/1401545.jpg"
-            alt=""
-            aria-hidden="true"
-            draggable="false"
-            className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-center opacity-3 [filter:grayscale(1)]"
-          />
-        </div>
-        {/* karakter (DESKTOP) — absolute kanan, fade ke bawah */}
+        <div className="about-tear absolute inset-0 overflow-hidden bg-ticket"></div>
         <img
-          src="/AboutMe.webp"
+          src="/Object-1.webp"
           alt="Axzy"
           draggable="false"
+          loading="lazy"
+          decoding="async"
           style={{
             WebkitMaskImage: 'linear-gradient(to bottom, #000 35%, transparent 92%)',
             maskImage: 'linear-gradient(to bottom, #000 35%, transparent 92%)',
           }}
-          className="pointer-events-none absolute bottom-auto right-0 top-auto z-[1] hidden h-[112%] w-auto max-w-none select-none object-contain object-bottom opacity-95 sm:-bottom-2 sm:right-[18%] sm:block"
+          className="pointer-events-none absolute bottom-auto top-auto z-[1] hidden h-[112%] w-auto max-w-none select-none object-contain object-bottom opacity-95 sm:-bottom-2 sm:right-0 sm:block md:right-[8%] lg:right-[18%]"
         />
         <motion.div
           initial={{ opacity: 0, y: 40, filter: 'blur(14px)' }}
@@ -78,16 +64,16 @@ export default function AboutServices() {
             clearly and leave a lasting impression.
           </p>
 
-          {/* quote — di bawah deskripsi, miring & agak pudar */}
           <p className="max-w-[42ch] font-jakarta text-base italic leading-relaxed text-white/35 sm:text-base">
             &ldquo;I communicate through visuals, not words.&rdquo;
           </p>
 
-          {/* karakter (MOBILE) — di flow, antara quote & tools */}
           <img
-            src="/AboutMe.webp"
+            src="/Object-1.webp"
             alt="Axzy"
             draggable="false"
+            loading="lazy"
+            decoding="async"
             style={{
               WebkitMaskImage: 'linear-gradient(to bottom, #000 55%, transparent 96%)',
               maskImage: 'linear-gradient(to bottom, #000 55%, transparent 96%)',
@@ -95,7 +81,6 @@ export default function AboutServices() {
             className="pointer-events-none mx-auto h-80 w-auto max-w-none select-none object-contain sm:hidden"
           />
 
-          {/* baris tools */}
           <div className="mt-6 flex flex-col items-center gap-6 text-center">
             <span className="font-jakarta text-2xl fw-600 tracking-tight text-white sm:text-3xl">
               Made with modern tools.
@@ -121,12 +106,10 @@ export default function AboutServices() {
         </motion.div>
       </div>
 
-      {/* ===== SERVICES (putih) — diselip naik ke sobekan About (overlap) ===== */}
       <div id="services" className="relative -mt-3 bg-paper">
         <div
           className="mx-auto grid max-w-[1400px] gap-10 px-6 py-16 sm:px-10 sm:py-28 md:grid-cols-[1.15fr_1fr] md:items-start md:gap-12"
         >
-          {/* kiri: label + daftar layanan (stagger) */}
           <div className="flex flex-col gap-6">
             <motion.span
               initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
@@ -153,7 +136,6 @@ export default function AboutServices() {
             ))}
           </div>
 
-          {/* kanan: judul + deskripsi + 3 card */}
           <div className="flex flex-col gap-6">
             <motion.p
               initial={{ opacity: 0, y: 30, filter: 'blur(12px)' }}
@@ -178,7 +160,6 @@ export default function AboutServices() {
               turn their ideas into creative and functional digital experiences.
             </motion.p>
 
-            {/* 3 card — stacked (glow putih di bawah + card hitam di atas) */}
             <div className="mt-2 grid w-full max-w-[62ch] grid-cols-1 gap-3 sm:grid-cols-3">
               {CARDS.map((c, i) => (
                 <motion.figure
@@ -189,7 +170,6 @@ export default function AboutServices() {
                   transition={{ duration: 0.6, ease: EASE, delay: 0.15 + i * 0.12 }}
                   className="group relative flex min-h-[120px] flex-col justify-between rounded-3xl rounded-br-[3rem] bg-black p-4 text-white shadow-[0_20px_40px_-16px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1"
                 >
-                  {/* glow putih (geser turun + blur, fade ke atas) */}
                   <div
                     aria-hidden="true"
                     style={{
@@ -198,13 +178,11 @@ export default function AboutServices() {
                     }}
                     className="pointer-events-none absolute inset-0 translate-y-3 rounded-3xl rounded-br-[3rem] bg-white blur-[15px]"
                   />
-                  {/* judul 2 baris */}
                   <h4 className="relative z-[1] text-center font-display text-sm uppercase leading-[1.05] tracking-tight sm:text-base">
                     {c.title[0]}
                     <br />
                     <span className="whitespace-nowrap">{c.title[1]}</span>
                   </h4>
-                  {/* pill putih (highlight inline, kecuali 'float' -> melayang) */}
                   <div className="relative z-[1] mb-3 flex items-center justify-center">
                     <span
                       className={`relative inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white py-1.5 text-[11px] fw-600 text-ink shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)] transition-transform duration-300 ${
@@ -221,21 +199,18 @@ export default function AboutServices() {
                           {c.highlight}
                         </span>
                       )}
-                      {/* ekor bubble chat */}
                       {c.bubble && (
                         <span
                           aria-hidden="true"
                           className="absolute -bottom-1.5 left-5 h-3 w-3 rotate-45 bg-white"
                         />
                       )}
-                      {/* highlight melayang (cuma 'float') */}
                       {c.highlight && c.float && (
                         <span className="absolute -right-4 top-1/2 -translate-y-1/2 rotate-[24deg] whitespace-nowrap rounded-full bg-lime px-2.5 py-1 text-[11px] fw-700 text-ink shadow-[0_6px_14px_-4px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:-translate-y-[60%] group-hover:rotate-[-8deg] group-hover:scale-110">
                           {c.highlight}
                         </span>
                       )}
                     </span>
-                    {/* tombol panah (card tengah) */}
                     {c.arrow && (
                       <span className="absolute -bottom-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-brand text-white shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-45">
                         <Bi name="arrow-up-right" className="text-[11px] leading-none" />

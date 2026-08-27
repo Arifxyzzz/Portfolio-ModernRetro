@@ -23,8 +23,8 @@ const SKILLS = [
 ]
 
 const CONTACTS = [
-  { label: 'Github', icon: 'github', href: '#' },
-  { label: 'Discord', icon: 'discord', href: '#' },
+  { label: 'Github', icon: 'github', href: 'https://github.com/Arifxyzzz' },
+  { label: 'Discord', icon: 'discord', href: 'https://discordapp.com/users/1064350742980337735' },
 ]
 
 const MarqueeRow = () => (

@@ -103,8 +103,9 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <a
-            href="#contact"
-            onClick={(e) => scrollTo(e, 'contact')}
+            href="https://bagibagi.co/Axzy"
+            target="_blank"
+            rel="noopener noreferrer"
             className="group hidden items-center gap-1 rounded-full bg-ink py-2.5 pl-5 pr-4 text-sm fw-500 leading-none text-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_24px_rgba(0,0,0,0.35)] sm:inline-flex"
           >
             <span className="leading-none">Support</span>
@@ -160,8 +161,9 @@ export default function Navbar() {
                 </motion.a>
               ))}
               <motion.a
-                href="#contact"
-                onClick={(e) => scrollTo(e, 'contact')}
+                href="https://bagibagi.co/Axzy"
+                target="_blank"
+                rel="noopener noreferrer"
                 variants={{
                   hidden: { opacity: 0, y: -14, filter: 'blur(6px)' },
                   show: { opacity: 1, y: 0, filter: 'blur(0px)' },

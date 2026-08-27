@@ -12,7 +12,7 @@ const NAV = [
 const SOCIAL = [
   { label: 'LinkedIn', href: '#' },
   { label: 'Instagram', href: '#' },
-  { label: 'TikTok', href: '#' },
+  { label: 'Store', href: 'https://axzyhub.com/' },
 ]
 
 const FooterCol = ({ title, items, external = false }) => (

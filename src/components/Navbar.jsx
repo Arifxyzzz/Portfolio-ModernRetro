@@ -4,15 +4,17 @@ import Logo from './Logo'
 import { Bi } from './Icons'
 import { ScrollContext } from '../scroll-context'
 import { useIsMobile } from '../use-is-mobile'
+import { navigate } from '../use-route'
 
 const links = [
   { label: 'Home', target: 'top' },
   { label: 'About', target: 'about' },
   { label: 'Service', target: 'services' },
+  { label: 'Project', target: '/projects' },
   { label: 'Contact', target: 'contact' },
 ]
 
-export default function Navbar() {
+export default function Navbar({ route = '/' }) {
   const [open, setOpen] = useState(false)
   const forceSolid =
     typeof window !== 'undefined' &&
@@ -20,7 +22,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(forceSolid)
   const scrollEl = useContext(ScrollContext)
   const isMobile = useIsMobile()
-  const solid = scrolled || open || isMobile
+  const onProjects = route.startsWith('/projects')
+  const solid = scrolled || open || isMobile || onProjects
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -30,8 +33,16 @@ export default function Navbar() {
   const scrollTo = (e, id) => {
     e.preventDefault()
     setOpen(false)
+    if (id.startsWith('/')) {
+      navigate(id)
+      return
+    }
+    if (onProjects) {
+      navigate(id === 'top' ? '/' : `/#${id}`)
+      return
+    }
     const el = document.getElementById(id)
-    if (!el) return
+    if (!el && id !== 'top') return
     const container = scrollEl ?? window
     if (id === 'top') {
       container.scrollTo({ top: 0, behavior: 'smooth' })
@@ -80,7 +91,7 @@ export default function Navbar() {
       />
 
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-6 sm:px-9">
-        <a href="#top" onClick={(e) => scrollTo(e, 'top')} className="flex items-center">
+        <a href="/" onClick={(e) => scrollTo(e, onProjects ? '/' : 'top')} className="flex items-center">
           <Logo height={46} className={solid ? 'text-ink' : 'text-white'} />
         </a>
 
@@ -91,7 +102,7 @@ export default function Navbar() {
               href={`#${l.target}`}
               onClick={(e) => scrollTo(e, l.target)}
               className={`text-base fw-500 transition-colors ${
-                scrolled
+                solid
                   ? 'text-ink/70 hover:text-ink'
                   : 'text-white/85 hover:text-white'
               }`}

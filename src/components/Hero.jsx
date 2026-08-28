@@ -58,9 +58,8 @@ export default function Hero() {
 
           <Fade delay={0.95} className="mt-6 max-w-[32ch] sm:mt-8 sm:max-w-[46ch]">
             <p className="text-base fw-500 leading-snug tracking-tight text-white/70 sm:text-xl">
-              Graphic design, Roblox UI, and scripting — visuals that get{' '}
-              <span className="fw-700 text-lime">understood</span> before anyone
-              reads a single word.
+              Graphic design, Roblox UI, and scripting, creating visuals that get {' '}
+              <span className="fw-700 text-lime">understood</span> before anyone reads a single word.
             </p>
           </Fade>
         </motion.div>
